@@ -1,0 +1,14 @@
+<div class="container">
+  <section class="section">
+    <mat-toolbar class="bar" color="primary">
+      <app-button></app-button>
+    </mat-toolbar>
+    <app-search (countryChange)="store.country$.next($event)" class="search-container"></app-search>
+    <app-map
+      class="map-container"
+      [data]="(vm$ | async)?.results || []"
+      [selected]="(vm$ | async)?.selected || null"
+    ></app-map>
+    <app-table [data]="(vm$ | async)?.results || []" (select)="onSelectRow($event)"></app-table>
+  </section>
+</div>

@@ -1,0 +1,35 @@
+mat-row { cursor: pointer; }
+.mat-mdc-header-row {
+    background: var(--dark);
+    color: var(--white);
+    font-weight: 500;
+    font-size: 14px;
+
+}
+
+.mat-column-country_code {
+    font-weight: bold!important;
+}
+
+.mat-mdc-cell {
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+}
+
+.mat-mdc-row:hover {
+    background: var(--green);
+    color: var(--white);
+}
+
+.mat-mdc-cell {
+    border-left: 1px solid #E8E7E7;
+}
+
+.mat-column-longitude {
+    border-right: 1px solid #E8E7E7;
+}
+
+.mdc-data-table__row:last-child > .mat-mdc-cell {
+    border-bottom: 1px solid #E8E7E7;
+}

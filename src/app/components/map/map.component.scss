@@ -1,0 +1,81 @@
+:host {
+  display: block !important;
+  width: auto;
+}
+
+.pin {
+  position: relative;
+}
+
+.pin .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--green) !important;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  box-shadow: 0 0 0 2px rgba(5, 192, 151, 0.3);
+}
+
+.pin-active .dot {
+  background: #FF0000;
+  box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.25);
+}
+
+.pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4);
+  animation: pulse 1.8s infinite;
+}
+
+.pin-active .pulse {
+  box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.35);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.35);
+  }
+
+  70% {
+    box-shadow: 0 0 0 12px rgba(25, 118, 210, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
+  }
+}
+
+.bounce {
+  animation: bounce 0.7s ease;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-8px);
+  }
+
+  60% {
+    transform: translateY(0);
+  }
+
+  80% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

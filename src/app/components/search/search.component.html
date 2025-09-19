@@ -1,0 +1,10 @@
+<mat-label class="mat-label">Ubicación</mat-label>
+<mat-form-field floatLabel="always" subscriptSizing="dynamic" class="select-country">
+  <mat-select [formControl]="control" placeholder="Seleccionar País" panelClass="select-panel-country"
+    aria-label="Seleccionar país">
+    <mat-option *ngFor="let c of (countries$ | async); trackBy: trackByCode" [value]="c.value">
+      <span class="code">{{ c.value }}</span>
+    </mat-option>
+  </mat-select>
+  <mat-hint *ngIf="loading">Cargando países…</mat-hint>
+</mat-form-field>

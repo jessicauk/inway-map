@@ -1,0 +1,40 @@
+<mat-table
+  [dataSource]="data"
+  class="mat-elevation-z1"
+  role="table"
+  aria-label="Resultados de códigos postales"
+>
+  <mat-header-row *matHeaderRowDef="displayed"></mat-header-row>
+  <ng-container matColumnDef="country_code">
+    <mat-header-cell *matHeaderCellDef> Código País </mat-header-cell>
+    <mat-cell *matCellDef="let r"> {{ r.country_code }} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="postal_code">
+    <mat-header-cell *matHeaderCellDef> Código Postal </mat-header-cell>
+    <mat-cell *matCellDef="let r"> {{ r.postal_code }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="place_name">
+    <mat-header-cell *matHeaderCellDef> Lugar </mat-header-cell>
+    <mat-cell *matCellDef="let r"> {{ r.place_name }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="latitude">
+    <mat-header-cell *matHeaderCellDef> Latitud </mat-header-cell>
+    <mat-cell *matCellDef="let r"> {{ r.latitude }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="longitude">
+    <mat-header-cell *matHeaderCellDef> Longitud </mat-header-cell>
+    <mat-cell *matCellDef="let r"> {{ r.longitude }} </mat-cell>
+  </ng-container>
+
+  
+  <mat-row
+    *matRowDef="let row; columns: displayed"
+    (click)="select.emit(row)"
+    tabindex="0"
+    (keyup.enter)="select.emit(row)"
+    aria-label="Seleccionar fila"
+  ></mat-row>
+</mat-table>

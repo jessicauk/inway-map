@@ -1,0 +1,26 @@
+.mat-label {
+  font-weight: 500;
+  font-size: 2rem;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+.select-country {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+@media screen and (max-width: 600px) {
+    .select-country {
+        width: 50%;
+        padding: 0 1rem;
+    }
+    .mat-label {
+        width: auto;
+    }
+    
+}

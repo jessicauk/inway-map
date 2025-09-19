@@ -7,8 +7,9 @@
   --green: #6cefc5;
   --white: #ffffff;
   --dark-blue: #054779;
-  --light-blue: rgba(255,255,255,0);
+  --light-blue: rgba(255, 255, 255, 0);
   --dark: #232936;
+  --red: #ff0000;
 
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
     sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Poppins';
@@ -17,83 +18,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-html, body, app-root {
+html,
+body,
+app-root {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-.pin {
-  position: relative;
-}
-.pin .dot {
-  width: 15px;
-  height: 15px;
-  border-radius: 999px;
-  background: #1976d2;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.3);
-}
-.pin-active .dot {
-  background: #d32f2f;
-  box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.25);
-}
-.pulse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  transform: translate(-50%, -50%);
-  border-radius: 999px;
-  box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4);
-  animation: pulse 1.8s infinite;
-}
-.pin-active .pulse {
-  box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.35);
-}
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.35);
-  }
-  70% {
-    box-shadow: 0 0 0 12px rgba(25, 118, 210, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
-  }
-}
-.bounce {
-  animation: bounce 0.7s ease;
-}
-@keyframes bounce {
-  0% {
-    transform: translateY(0);
-  }
-  30% {
-    transform: translateY(-8px);
-  }
-  60% {
-    transform: translateY(0);
-  }
-  80% {
-    transform: translateY(-4px);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
 
 .select-panel-country {
@@ -108,7 +50,7 @@ html, body, app-root {
 .mat-mdc-form-field-infix {
   background: var(--dark) !important;
   color: var(--white) !important;
-  padding:0 10px;
+  padding: 0 10px;
 }
 
 .mat-mdc-form-field-infix:hover {
@@ -130,16 +72,16 @@ html, body, app-root {
 .back-button.mat-icon {
   font-size: 2rem !important;
   border-radius: 50% !important;
-    background: var(--dark-blue) !important;
-    color: var(--white) !important;
+  background: var(--dark-blue) !important;
+  color: var(--white) !important;
 }
 .select-country {
-    .mdc-text-field {
-        padding: 0 !important;
-    }
-    .mat-mdc-text-field-wrapper {
+  .mdc-text-field {
+    padding: 0 !important;
+  }
+  .mat-mdc-text-field-wrapper {
     border-radius: 25px;
-    box-shadow: 0 8px 16px rgba(0,0,0,.24);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
     background: var(--dark);
     padding-top: 14px;
     padding-bottom: 14px;
@@ -147,7 +89,7 @@ html, body, app-root {
     font-size: 17px;
     line-height: 22px;
     font-family: 'Roboto', sans-serif;
-    text-align: center  !important;
+    text-align: center !important;
   }
 
   /* quita el borde del outline y el overlay de foco */
@@ -157,13 +99,79 @@ html, body, app-root {
   .mdc-notched-outline__trailing {
     display: none !important;
   }
-  .mat-mdc-form-field-focus-overlay { display: none !important; }
+  .mat-mdc-form-field-focus-overlay {
+    display: none !important;
+  }
 
-  /* elimina posibles focus rings del navegador */
-  .mdc-text-field, .mat-mdc-select-trigger, & { outline: none !important; padding: .5rem}
+  /* elimina posibles focus del navegador */
+  .mdc-text-field,
+  .mat-mdc-select-trigger,
+  & {
+    outline: none !important;
+    padding: 0.5rem;
+  }
 
   /* altura y tipografía */
-  .mat-mdc-form-field-infix { padding: 8px 0 !important; height: 100%; width: 100%; }
-  .mat-mdc-select-arrow, .mat-mdc-select-value { color: #fff; }
+  .mat-mdc-form-field-infix {
+    padding: 8px 0 !important;
+    height: 100%;
+    width: 100%;
+  }
+  .mat-mdc-select-arrow,
+  .mat-mdc-select-value {
+    color: var(--white) !important;
+  }
+}
 
+// OVERLAY
+
+.app-map .leaflet-pane.leaflet-tile-pane {
+  position: relative; /* para posicionar el ::after */
+}
+
+.app-map .leaflet-pane.leaflet-tile-pane::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  /* Overlay visual SIEMPRE presente */
+  opacity: 1 !important;
+  transition: none !important;
+  animation: none !important;
+
+  /* Viñeta oscura fija */
+  --overlay-opacity: 0.7;
+  background: radial-gradient(
+    120% 95% at 50% 35%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(29, 29, 29, 0.68) 68%,
+    rgba(20, 23, 24, 0.82) 100%
+  );
+}
+
+.app-map .leaflet-pane.leaflet-tile-pane::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 1 !important;
+  transition: none !important;
+  animation: none !important;
+  --overlay-opacity: 0.7;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, var(--overlay-opacity)),
+    rgba(0, 0, 0, 0) 220px
+  );
+}
+
+.app-map .leaflet-tile-pane {
+  filter: brightness(0.85) saturate(0.9);
+}
+
+@media (max-width: 600px) {
+  .home {
+    padding: 2rem;
+  }
 }

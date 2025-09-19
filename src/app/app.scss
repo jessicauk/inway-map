@@ -1,6 +1,7 @@
 :ng-deep .leaflet-container {
   filter: brightness(0.85) saturate(0.9);
 }
+
 :host {
     display:block; min-height:100dvh;
 }
@@ -21,6 +22,7 @@ p {
   margin: 0;
   color: var(--blue);
 }
+
 
 
 

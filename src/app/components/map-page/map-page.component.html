@@ -5,6 +5,8 @@
     </mat-toolbar>
     <app-search (countryChange)="store.country$.next($event)" class="search-container"></app-search>
     <app-map
+      overlay="vignette"
+      [overlayOpacity]="0.3"
       class="map-container"
       [data]="(vm$ | async)?.results || []"
       [selected]="(vm$ | async)?.selected || null"

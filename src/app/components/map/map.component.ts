@@ -1,26 +1,42 @@
-import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { latLng, tileLayer, Map, marker, Marker, divIcon, LatLngTuple } from 'leaflet';
+import { latLng, tileLayer, Map, marker, Marker, divIcon, LatLngTuple, DomUtil } from 'leaflet';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 
 import { PostalRecordFields } from '../../api/models';
 import { environment } from '../../environments/env';
+
+type OverlayType = 'vignette' | 'top-gradient' | 'dim' | 'none';
 
 @Component({
   selector: 'app-map',
   standalone: true,
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
-  imports: [LeafletModule, CommonModule]
+  imports: [LeafletModule, CommonModule],
+  encapsulation: ViewEncapsulation.None,
 })
 export class MapComponent implements OnChanges {
   @Input() data: PostalRecordFields[] = [];
   @Input() selected: PostalRecordFields | null = null;
   @Output() pinSelect = new EventEmitter<PostalRecordFields>();
+  @Input() overlay: OverlayType = 'vignette';
+  @Input() overlayOpacity = 0.35;
 
   map!: Map;
   markers: Marker[] = [];
+
+  /* Overlay */
+  private overlayEl?: HTMLDivElement;
+  private overlayPaneCreated = false;
 
   options = {
     center: latLng(20, 0),
@@ -28,14 +44,42 @@ export class MapComponent implements OnChanges {
     layers: [
       tileLayer(environment.osmTileUrl, {
         attribution: environment.osmAttribution,
-        maxZoom: 19
-      })
-    ]
+        maxZoom: 19,
+      }),
+    ],
   };
 
   onMapReady(m: Map) {
     this.map = m;
     this.refreshMarkers();
+    this.createOverlayPane();
+    //this.refreshOverlay();
+  }
+
+  // ---------- Overlay (pane) ----------
+  private createOverlayPane() {
+   if (!this.map || this.overlayPaneCreated) return;
+    const pane = this.map.createPane('shadePane');
+    pane.style.zIndex = '350';
+    pane.style.pointerEvents = 'none';
+    this.overlayEl = (window as any).L.DomUtil.create('div', 'map-shade vignette', pane);
+    if (this.overlayEl) {
+      this.overlayEl.style.setProperty('--overlay-opacity', '0.35');
+    }
+    this.overlayPaneCreated = true;
+  }
+
+  private refreshOverlay() {
+    if (!this.overlayEl) return;
+
+    // resetea clases
+    this.overlayEl.className = 'map-shade';
+    if (this.overlay === 'vignette') this.overlayEl.classList.add('vignette');
+    else if (this.overlay === 'top-gradient') this.overlayEl.classList.add('top-gradient');
+    else if (this.overlay === 'dim') this.overlayEl.classList.add('dim');
+
+    // controla la intensidad
+    this.overlayEl.style.setProperty('--overlay-opacity', String(this.overlayOpacity));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -52,20 +96,21 @@ export class MapComponent implements OnChanges {
   }
 
   private refreshMarkers() {
-    console.log("refreshMarkers", this.data);
-    this.markers.forEach(m => m.remove());
+    console.log('refreshMarkers', this.data);
+    this.markers.forEach((m) => m.remove());
     this.markers = [];
     const coords: [number, number][] = [];
 
     for (const r of this.data) {
       const ll = this.getLatLng(r);
       if (!ll) continue;
-      const [lat, lon] = ll; coords.push([lat, lon]);
+      const [lat, lon] = ll;
+      coords.push([lat, lon]);
       const m = marker(ll, {
-        icon: this.makeIcon(false)
+        icon: this.makeIcon(false),
       }).on('click', () => {
         const event = new CustomEvent('pin-selected', { detail: r });
-        window.dispatchEvent(event); // canal simple de comunicación
+        window.dispatchEvent(event);
         this.bounce(m);
       });
       m.addTo(this.map);
@@ -80,14 +125,14 @@ export class MapComponent implements OnChanges {
   }
 
   private focusSelected() {
-    console.log("focusSelected", this.selected);
+    console.log('focusSelected', this.selected);
     if (!this.selected) return;
     const ll = this.getLatLng(this.selected);
     if (!ll) return;
     this.map.flyTo(ll, Math.max(8, this.map.getZoom()));
-    console.log("focusSelected to", ll);
+    console.log('focusSelected to', ll);
     // resaltar pin seleccionado
-    const idx = this.data.findIndex(d => d === this.selected);
+    const idx = this.data.findIndex((d) => d === this.selected);
     if (idx >= 0 && this.markers[idx]) {
       this.markers[idx].setIcon(this.makeIcon(true));
       this.bounce(this.markers[idx]);
@@ -100,7 +145,7 @@ export class MapComponent implements OnChanges {
       className: active ? 'pin pin-active' : 'pin',
       html: `<div class="pulse"></div><div class="dot"></div>`,
       iconSize: [100, 100],
-      iconAnchor: [50, 100]
+      iconAnchor: [50, 100],
     });
   }
 
@@ -110,4 +155,3 @@ export class MapComponent implements OnChanges {
     setTimeout(() => iconEl?.classList.remove('bounce'), 700);
   }
 }
-

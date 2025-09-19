@@ -2,16 +2,14 @@
   display: block !important;
   width: auto;
 }
-
-.pin {
-  position: relative;
-}
+/* Pins */
 
 .pin .dot {
   width: 10px;
   height: 10px;
   border-radius: 999px;
   background: var(--green) !important;
+  border: 1.5px solid var(--white) !important;
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
@@ -20,7 +18,8 @@
 }
 
 .pin-active .dot {
-  background: #FF0000;
+  background: var(--red) !important;
+  border: 1.5px solid var(--white) !important;
   box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.25);
 }
 
@@ -79,3 +78,43 @@
     transform: translateY(0);
   }
 }
+
+/* Mapa overlay */
+
+.app-map { position: relative; min-height: 420px; }
+
+/* ===== Overlay fijo (no bloquea) ===== */
+.map-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --overlay-opacity: .35;
+  opacity: 1 !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Evita fades al hacer zoom/pan */
+.leaflet-fade-anim .map-shade,
+.leaflet-zoom-anim .map-shade {
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+/* Estilos posibles del overlay */
+.map-shade.vignette {
+  background:
+    radial-gradient(60% 60% at 50% 50%,
+      rgba(0,0,0,0) 40%,
+      rgba(0,0,0,var(--overlay-opacity)) 100%);
+}
+.map-shade.top-gradient {
+  background:
+    linear-gradient(to bottom,
+      rgba(0,0,0,var(--overlay-opacity)),
+      rgba(0,0,0,0) 220px);
+}
+.map-shade.dim {
+  background: rgba(0,0,0,var(--overlay-opacity));
+}
+
